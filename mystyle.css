@@ -1,0 +1,26 @@
+﻿body {
+}
+.menu {
+    margin: 10px;
+    padding: 10px;
+    font-size: 14px;
+    display: block;
+    float: inherit;
+    background-image: url(pic/bglogin.png);
+    background-position: center;
+    background-repeat: repeat-x;
+    border-style: solid;
+    border-width: 3px;
+    width: 20%;
+    height: 90%;
+}
+
+    .menu ul {
+        background-color: #41428b;
+        color: White;
+        width: 100%;
+    }
+
+.tt {
+    height: 150px;
+}  
