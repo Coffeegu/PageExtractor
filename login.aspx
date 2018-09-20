@@ -41,8 +41,6 @@
             border-bottom-left-radius: 5px;
         }
 
-
-
         .text_field {
             width: 278px;
             height: 28px;
@@ -67,34 +65,14 @@
             float: left;
         }
 
-
-
-        #forget_pwd {
-            font-size: 12px;
-            color: black;
-            text-decoration: none;
-            position: relative;
-            float: right;
-            top: 5px;
-        }
-
-
-
-            #forget_pwd:hover {
-                color: blue;
-                text-decoration: underline;
-            }
-
-
-
         #login_control {
             padding: 0 28px;
         }
 
-        #abov {
+        .abov {
             font-size: 14px;
             font: Tahoma;
-            width: 120px;
+            width: 160px;
             height: 28px;
             line-height: 28px;
             text-align: center;
@@ -106,35 +84,41 @@
     </style>
     <script type="text/javascript">
 
-    </script>
+</script>
 </head>
-<body style="background-color: #e5eecc; text-align: center">
+<body style="background-color: #e5eecc; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: small">
     <div id="login_frame">
         <form id="form1" runat="server">
+            <h4 style="font-size: medium">Log In</h4>
+            <hr />
+            <asp:PlaceHolder runat="server" ID="LoginStatus" Visible="false">
+                <p>
+                    <asp:Literal runat="server" ID="StatusText" />
+                </p>
+            </asp:PlaceHolder>
+            <p>
+                <asp:Label runat="server" AssociatedControlID="UserName">UserName</asp:Label><asp:TextBox ID="UserName" runat="server" class="text_field" />
+            </p>
 
             <p>
-                <asp:Label runat="server">UserName</asp:Label><asp:TextBox ID="labuser" runat="server" class="text_field" />
+                <asp:Label runat="server" AssociatedControlID="Password">Password</asp:Label><asp:TextBox ID="Password" runat="server" TextMode="Password" class="text_field" />
             </p>
-
-            <p>
-                <asp:Label runat="server">Password</asp:Label><asp:TextBox ID="labpwd" runat="server" TextMode="Password" class="text_field"/>
-            </p>
-
-            <div id="login_control">
-                                
-                <asp:Button ID="allow" runat="server" OnClick="allow_Click" Text="Login"/>
-              
-                <a id="forget_pwd" href="forget_pwd.html">forget password?</a>
-
-            </div>
-
-            <p>
-                <asp:Label ID="Label3" runat="server"></asp:Label>
-            </p>
-             <p>
-                <asp:Button ID="abov" runat="server" Text="Register" OnClick="abov_Click" />
-            </p>
+            <asp:PlaceHolder runat="server" ID="LoginForm" Visible="false">
+                <div style="margin-bottom: 10px">
+                    <div>
+                        <asp:Button class="abov" runat="server" OnClick="SignIn" Text="Log in" />
+                    </div>
+                </div>
+            </asp:PlaceHolder>
+            <asp:PlaceHolder runat="server" ID="LogoutButton" Visible="false">
+                <div style="margin-bottom: 10px">
+                    <div>
+                        <asp:Button class="abov" runat="server" OnClick="btn_Select" Text="Only view information" />
+                    </div>
+                </div>
+            </asp:PlaceHolder>
         </form>
+       
     </div>
 </body>
 </html>

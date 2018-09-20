@@ -1,3 +1,5 @@
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +28,14 @@ namespace WebApplication1
         protected void Page_Load(object sender, EventArgs e)
         {
             Calendar1.SelectionChanged += new EventHandler(this.Calendar_SelectionChanged);
-            if (Convert.ToInt32(Request.QueryString["grade"])>1)
+
+            if (!IsPostBack)
             {
-                this.Button3.Visible = true;
-            }
-            if (string.IsNullOrEmpty(label2.Text))
-            {
-                //label2.Text = Session["name"].ToString();
-                label2.Text = Request.QueryString["name"];
+                if (User.Identity.IsAuthenticated)
+                {
+                    label2.Text = string.Format(", {0}!!", User.Identity.GetUserName());
+                    this.MM.Visible = true;
+                }
             }
         }
 
@@ -181,10 +183,11 @@ namespace WebApplication1
             SqlCommand cmd = new SqlCommand(sql, con);
 
             SqlDataReader sdr = cmd.ExecuteReader();
-
+            
             DataTable db = new DataTable();
             TimeSpan ts = DateTime.Parse(sd) - DateTime.Parse(fd);
             int[] sum;
+            int[] invaildDate;
             if (sdr.HasRows)
             {
                 db.Load(sdr);
@@ -192,6 +195,7 @@ namespace WebApplication1
                 db.Columns.Add(colItem);
                 int i = 0;
                 sum = new int[db.Rows.Count];
+                invaildDate = new int[db.Rows.Count];
                 DataRow newRow = db.NewRow();
                 int k = ts.Days+1;
                 while (i <= ts.Days)
@@ -206,6 +210,7 @@ namespace WebApplication1
                         fDate = Convert.ToDateTime(sd);
                     }
 
+                    //if(fDate.DayOfWeek.ToString()=="Saturday"|| fDate.DayOfWeek.ToString() == "Sunday")
                     DName = fDate.ToString("m", CultureInfo.CreateSpecificCulture("en-US"));
                     DataColumn colItems = new DataColumn(DName, Type.GetType("System.Int32"));
                     db.Columns.Add(colItems);
@@ -214,6 +219,7 @@ namespace WebApplication1
                     using (SqlCommand sqlcom = new SqlCommand(sql, con))
                     {
                         SqlDataReader sr = sqlcom.ExecuteReader();
+                        string dn = "";
                         while (sr.Read())
                         {
                             for (int j = 0; j < db.Rows.Count; j++)
@@ -223,13 +229,21 @@ namespace WebApplication1
                                 string sss = db.Rows[j].ToString();
                                 if (di.Contains(sr[1].ToString()))
                                 {
+                                    if (db.Rows[j][DName].ToString() == "0"&&dn==DName)
+                                    {
+                                        invaildDate[j]--;
+                                    }
                                     db.Rows[j][DName] = Convert.ToInt32(sr[2]);
                                     sum[j] += Convert.ToInt32(sr[2]);
-                                    if (Convert.ToInt32(sr[2]) == 0)
-                                    {
-                                        k--;
-                                    }
                                     //db.Rows[j]["Total"] += Convert.ToInt32(sr[2]);
+                                }else if (db.Rows[j][DName].ToString()=="")
+                                {
+                                    db.Rows[j][DName] = Convert.ToInt32(0);
+                                    invaildDate[j]++;
+                                    if (dn == "")
+                                    {
+                                        dn = DName;
+                                    }
                                 }
                             }
                             rs += Convert.ToInt32(sr[2]);
@@ -243,7 +257,15 @@ namespace WebApplication1
                 {
                     if (ts.Days > 0)
                     {
-                        db.Rows[c]["Avg"] = sum[c] / k;
+                        if((k - invaildDate[c]) != 0)
+                        {
+                            db.Rows[c]["Avg"] = sum[c] / (k - invaildDate[c]);
+                        }
+                        else
+                        {
+                            db.Rows[c]["Avg"] = sum[c] / k;
+                        }
+                        
                     }
                 }
                 //newRow["UserID"] = "";
@@ -312,7 +334,7 @@ namespace WebApplication1
         protected void btnAdd_Click(object sender, EventArgs e)
         {
 
-            string u = TextBox2.Text;
+            /*string u = TextBox2.Text;
             int i = 0;
             string sqltest = "";
             if (string.IsNullOrEmpty(this.TextBox2.Text))
@@ -340,7 +362,8 @@ namespace WebApplication1
             }
 
             Response.Redirect("WebForm1.aspx");
-
+            */
+            Response.Redirect("Default.aspx");
         }
 
         protected void btnTest_Click(object sender, EventArgs e)
@@ -430,7 +453,7 @@ namespace WebApplication1
             {
                 //e.Row.Cells[0].FindControl("CheckItem").Visible = (e.Row.Cells[2].Text.Trim() == "0" ? true : false);
                 //e.Row.Cells[2].Text = (e.Row.Cells[2].Text.Trim() == "0" ? "No" : "Yes");
-                e.Row.Cells[0].FindControl("CheckItem").Visible = (this.Button3.Visible == true ? true : false);
+                e.Row.Cells[0].FindControl("CheckItem").Visible = true;
             }
         }
         protected void btnDel_Click(object sender, EventArgs e)
@@ -520,9 +543,11 @@ namespace WebApplication1
            
         }
 
-        protected void btnReturn_Click(object sender, EventArgs e)
+        protected void btn_SignOutClick(object sender, EventArgs e)
         {
-            Response.Redirect("login.aspx");
+            var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
+            authenticationManager.SignOut();
+            Response.Redirect("~/Login.aspx");
         }
     }
 

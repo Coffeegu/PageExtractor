@@ -1,28 +1,28 @@
-<<<<<<< HEAD
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="WebApplication1.WebForm1" %>
-=======
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WebForm1.aspx.cs" Inherits="WebApplication1.WebForm1" %>
->>>>>>> the initial edition
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>在Web应用程序中执行计划任务的例子</title>
+    <title>Example of executing a scheduled task in a Web application</title>
     <style type="text/css">
         .auto-style1 {
             height: 26px;
         }
     </style>
 </head>
-<body style="background-color: #e5eecc; text-align: center;">
+<body style="background-color: #e5eecc; text-align: center">
     <script type="text/javascript" src="js/calendar.js"></script>
     <form id="form1" runat="server" method="post">
+        <h3 style="color:coral;text-align:left">MSDN Engineer Daily UT Report</h3>
         <div>
-            <asp:Label ID="label1" runat="server">Welcome , </asp:Label>
+            <asp:Label ID="label1" runat="server">Welcome</asp:Label>
             <asp:Label ID="label2" runat="server"></asp:Label>
+            <asp:Button ID="SignOut" runat="server" Text="Exit" OnClick="btn_SignOutClick" Style="background: transparent; float: right; width: 60px" />
+
             <br />
             <br />
+
             <asp:Panel runat="server">
                 Name:
             <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
@@ -43,7 +43,7 @@
             &nbsp;
             <asp:Button ID="Button2" runat="server" Text="Reset" OnClick="btnReset_Click" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="102px" />
             &nbsp;
-            <asp:Button ID="btn_return" runat="server" Text="Return" OnClick="btnReturn_Click" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="102px" />
+            
              <h3>&nbsp;Calendar SelectionChanged&nbsp;&nbsp; </h3>
 
             Select a day, week, or month on the Calendar control.<br />
@@ -82,9 +82,9 @@
                     </td>
 
                 </tr>
-
+ 
             </table>
-
+        <h4 style="color:cornflowerblue;text-align:left">Holiday </h4>
         </div>
         <asp:GridView ID="GridView1" runat="server" CellPadding="4" ForeColor="#333333" GridLines="None" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" OnRowDataBound="GridView1_RowDataBound">
             <AlternatingRowStyle BackColor="White" />
@@ -112,13 +112,13 @@
             </Columns>
         </asp:GridView>
 
+        <asp:Button ID="MM" runat="server" Text="Memeber Mannagement" OnClick="btnAdd_Click" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="202px" Visible="false" />
+        &nbsp;
         <p>
             <asp:Label ID="DeleteResults" runat="server" EnableViewState="False"
                 Visible="False"></asp:Label>
         </p>
-        <asp:Button ID="Button3" runat="server" Text="Add" OnClick="btnAdd_Click" Enabled="false" OnClientClick="return confirm('Confirm Registration?')" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="102px" Visible="false" />
-        &nbsp;
-            <asp:Button ID="DeleteSelectedPerson" runat="server" Text="Delete" OnClick="btnDel_Click" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="102px" />
+        <asp:Button ID="DeleteSelectedPerson" runat="server" Text="Delete" OnClick="btnDel_Click" BackColor="#CCFFFF" BorderStyle="Outset" BorderWidth="0px" Font-Names="Tahoma" Font-Size="Large" Height="48px" Width="102px" visual="false"/>
     </form>
 </body>
 </html>
